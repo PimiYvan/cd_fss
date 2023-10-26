@@ -25,3 +25,5 @@ echo 'downloading Fss dataset'
 !rm -r ./fewshot_data
 !mv ./Datasets_PATNET/fewshot_data ./Datasets_PATNET/FSS-1000
 
+
+python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "my-logs"
