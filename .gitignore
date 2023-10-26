@@ -1,0 +1,9 @@
+
+mycronlog.txt
+__pycache__/
+file.log
+
+venv/
+env/
+.env
+
