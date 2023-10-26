@@ -8,3 +8,7 @@ env/
 .env
 
 Datasets_PATNET/ 
+VOCtrainval_11-May-2012.tar
+fewshot_data.zip
+SegmentationClassAug.zip
+

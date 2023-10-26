@@ -4,13 +4,15 @@ echo 'downloading pascal'
 !wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
 !tar -xvf VOCtrainval_11-May-2012.tar
 
-!pip install gdown
+# pip3.9 install gdown 
+!pip install gdown #python 3.8 at least 
 
 echo 'downloading segmentation class of pascal'
 !gdown 10zxG2VExoEZUeyQl_uXga2OWHjGeZaf2
 !unzip SegmentationClassAug.zip
 
-!mv SegmentationClassAug ./VOCdevkit/VOC2012/
+# mkdir ./VOCdevkit/VOC2012/
+!mv ./SegmentationClassAug ./VOCdevkit/VOC2012/
 
 !mkdir Datasets_PATNET
 !mv ./VOCdevkit ./Datasets_PATNET
