@@ -14,3 +14,5 @@ pip freeze > requirements.txt <br/>
 if you setting up the project you should run <br/>
 pip install -r requirements.txt <br/>
 
+export CUDA_VISIBLE_DEVICES=0,1
+
