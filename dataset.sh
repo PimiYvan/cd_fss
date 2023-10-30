@@ -31,3 +31,10 @@ python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bs
 
 pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 
+x = torch.tensor([1,2]).cuda()
+torch.cuda.device_count()
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+
+pip install torch==1.9.1+cu102 torchvision==0.10.1+cu102 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+
