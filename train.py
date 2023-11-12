@@ -46,7 +46,8 @@ def train(epoch, model, dataloader, optimizer, training):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask, batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss.detach().clone())
         average_meter.write_process(idx, len(dataloader), epoch, write_batch_idx=50)
-
+        break 
+    
     # Write evaluation results
     average_meter.write_result('Training' if training else 'Validation', epoch)
     avg_loss = utils.mean(average_meter.loss_buf)
