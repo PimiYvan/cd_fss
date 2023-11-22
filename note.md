@@ -14,5 +14,19 @@ pip freeze > requirements.txt <br/>
 if you setting up the project you should run <br/>
 pip install -r requirements.txt <br/>
 
+salloc --time=1:0:0 --mem=3G --ntasks=2 --account=def-menna --gres=gpu:1 --nodes=1
+
 export CUDA_VISIBLE_DEVICES=0,1
+
+seff 12945221
+
+
+seff 12945980
+12947371
+
+13022692
+13022723
+13022839
+
+git clone https://github.com/slei109/PATNet.git
 
