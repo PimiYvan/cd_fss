@@ -1,4 +1,3 @@
-
 #!/bin/bash
 # ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
@@ -16,7 +15,7 @@
 # ---------------------------------------------------------------------
 # Wall time
 # ---------------------------------------------------------------------
-#SBATCH --time=00:03:00
+#SBATCH --time=00:05:00
 # ---------------------------------------------------------------------
 # Job output
 # ---------------------------------------------------------------------
@@ -40,7 +39,8 @@ echo ""
 echo "Current working directory: $(pwd)"
 echo ""
 echo "Starting $JOB_NAME job at: $(date)"
-echo ""
+echo "Downloading dataset"
+
 # echo "Job Array ID / Job ID: $SLURM_ARRAY_JOB_ID / $SLURM_JOB_ID"
 # echo "This is job $SLURM_ARRAY_TASK_ID out of $SLURM_ARRAY_TASK_COUNT jobs."
 # echo ""
@@ -48,7 +48,7 @@ echo ""
 # Load CCDB modules simulation / Python script
 # ---------------------------------------------------------------------
 module load python/3.9
-module load scipy-stack
+# module load scipy-stack
 # ---------------------------------------------------------------------
 # Set up virtual environment
 # ---------------------------------------------------------------------
@@ -58,9 +58,16 @@ source $SLURM_TMPDIR/env/bin/activate
 # Install python packages / wheels
 # ---------------------------------------------------------------------
 pip install --no-index torch #torchvision 
+pip install --no-index torchvision #torchvision  
+pip install --no-index tensorboardX 
+
+# Finish donwloading the dataset 
+
 # ---------------------------------------------------------------------
 # Run simulation / Python script
 # ---------------------------------------------------------------------
 export CUDA_VISIBLE_DEVICES=0
+cd cd_fss 
+python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "../"
 # python test.py
 nvidia-smi
