@@ -34,7 +34,7 @@ class DatasetPASCAL(Dataset):
     def __getitem__(self, idx):
         idx %= len(self.img_metadata)  # for testing, as n_images < 1000
         query_name, support_names, class_sample = self.sample_episode(idx)
-        print(query_name, support_names, idx)
+        print(query_name, support_names, idx, len(self.img_metadata))
         query_img, query_cmask, support_imgs, support_cmasks, org_qry_imsize = self.load_frame(query_name, support_names)
 
         query_img = self.transform(query_img)
