@@ -34,7 +34,6 @@ class DatasetPASCAL(Dataset):
     def __getitem__(self, idx):
         idx %= len(self.img_metadata)  # for testing, as n_images < 1000
         query_name, support_names, class_sample = self.sample_episode(idx)
-        print(query_name, support_names, idx, len(self.img_metadata))
         query_img, query_cmask, support_imgs, support_cmasks, org_qry_imsize = self.load_frame(query_name, support_names)
 
         query_img = self.transform(query_img)
@@ -101,6 +100,8 @@ class DatasetPASCAL(Dataset):
         support_names = []
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
+            if not os.path.isfile(os.path.join(self.img_path, support_name) + '.jpg') : 
+                continue
             if query_name != support_name: support_names.append(support_name)
             if len(support_names) == self.shot: break
 
