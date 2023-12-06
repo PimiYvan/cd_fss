@@ -1,4 +1,11 @@
 13110108
 13110320
 13131918 # 2 day
+13364120 # 2 day 
+
+
+
+
+seff 13364120
+salloc --time=1:0:0 --mem=3G --ntasks=2 --account=def-menna --gres=gpu:1 --nodes=1
 

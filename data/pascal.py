@@ -94,6 +94,11 @@ class DatasetPASCAL(Dataset):
         r"""Return RGB image in PIL Image"""
         return Image.open(os.path.join(self.img_path, img_name) + '.jpg')
 
+    def save_error(self, image_name):
+        file = open("file.txt","a")
+        file.write(image_name +"\n")
+        file.close()
+
     def sample_episode(self, idx):
         query_name, class_sample = self.img_metadata[idx]
 
@@ -101,6 +106,7 @@ class DatasetPASCAL(Dataset):
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
             if not os.path.isfile(os.path.join(self.img_path, support_name) + '.jpg') : 
+                self.save_error(support_name)
                 continue
             if query_name != support_name: support_names.append(support_name)
             if len(support_names) == self.shot: break
