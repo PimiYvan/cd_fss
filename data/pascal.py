@@ -108,6 +108,7 @@ class DatasetPASCAL(Dataset):
             if not os.path.isfile(os.path.join(self.img_path, support_name) + '.jpg') : 
                 self.save_error(support_name)
                 continue
+            
             if query_name != support_name: support_names.append(support_name)
             if len(support_names) == self.shot: break
 
