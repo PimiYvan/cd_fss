@@ -7,5 +7,6 @@
 
 
 seff 13364120
+seff 13494113
 salloc --time=1:0:0 --mem=3G --ntasks=2 --account=def-menna --gres=gpu:1 --nodes=1
 

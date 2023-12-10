@@ -31,3 +31,7 @@ seff 12945980
 
 git clone https://github.com/slei109/PATNet.git
 
+nano ~/.ssh/config
+
+nano ~/.ssh/id_rsa
+ssh -Tv graham.alliancecan.ca

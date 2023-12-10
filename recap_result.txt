@@ -22,6 +22,27 @@
 
 ************************************************************
 
+:=========== Cross-Domain Few-shot Seg. with PATNet ===========
+|             datapath: ./Datasets_PATNET       
+|            benchmark: pascal                  
+|              logpath: my-logs                 
+|                  bsz: 10                      
+|                   lr: 5e-05                   
+|                niter: 55                      
+|              nworker: 0                       
+|                 fold: 4                       
+|             backbone: resnet50                
+:================================================
 
+*** Training [@Epoch 54] Avg L: 0.09439  mIoU: 84.42   FB-IoU: 90.11   ***
 
+[Epoch: 54] [Batch: 0001/0240] L: 0.34200  Avg L: 0.34200  mIoU:  0.24  |  FB-IoU: 73.22
+[Epoch: 54] [Batch: 0051/0240] L: 0.11244  Avg L: 0.18238  mIoU: 15.96  |  FB-IoU: 84.62
+[Epoch: 54] [Batch: 0101/0240] L: 0.17933  Avg L: 0.24349  mIoU: 30.85  |  FB-IoU: 82.35
+[Epoch: 54] [Batch: 0151/0240] L: 0.06288  Avg L: 0.23142  mIoU: 45.84  |  FB-IoU: 82.60
+[Epoch: 54] [Batch: 0201/0240] L: 0.09712  Avg L: 0.23386  mIoU: 60.44  |  FB-IoU: 82.28
+
+*** Validation [@Epoch 54] Avg L: 0.23712  mIoU: 71.55   FB-IoU: 82.01   ***
+
+************************************************************
 

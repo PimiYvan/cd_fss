@@ -15,7 +15,7 @@
 # ---------------------------------------------------------------------
 # Wall time
 # ---------------------------------------------------------------------
-#SBATCH --time=00:05:00
+#SBATCH --time=45:30:00
 # ---------------------------------------------------------------------
 # Job output
 # ---------------------------------------------------------------------
@@ -68,6 +68,6 @@ pip install --no-index tensorboardX
 # ---------------------------------------------------------------------
 export CUDA_VISIBLE_DEVICES=0
 cd cd_fss 
-python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "../"
+python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 5e-5 --bsz 10 --logpath "my-logs"
 # python test.py
 nvidia-smi
