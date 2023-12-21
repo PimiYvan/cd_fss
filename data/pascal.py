@@ -6,6 +6,22 @@ import torch.nn.functional as F
 import torch
 import PIL.Image as Image
 import numpy as np
+import logging
+
+# Set up basic configuration for logging
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+def log_info(message):
+    """
+    Logs an information level message.
+    """
+    logging.info(message)
+
+# Usage example
+# log_info("This")
 
 
 class DatasetPASCAL(Dataset):
@@ -106,7 +122,10 @@ class DatasetPASCAL(Dataset):
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
             if not os.path.isfile(os.path.join(self.img_path, support_name) + '.jpg') : 
-                self.save_error(support_name)
+                # self.save_error(support_name)
+                print(' missing file with an issue ' + support_name)
+                assert False, ' missing file with an issue ' + support_name
+                # log_info(support_name, ' missing file with an issue ')
                 continue
             
             if query_name != support_name: support_names.append(support_name)

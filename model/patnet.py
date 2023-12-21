@@ -5,7 +5,7 @@ from operator import add
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# from torchvision.models import resnet
+from torchvision.models import resnet
 from torchvision.models import vgg
 
 from .base.feature import extract_feat_vgg, extract_feat_res
@@ -34,8 +34,8 @@ class PATNetwork(nn.Module):
             nn.init.kaiming_normal_(self.reference_layer1.weight, a=0, mode='fan_in', nonlinearity='linear')
             nn.init.constant_(self.reference_layer1.bias, 0)
         elif backbone == 'resnet50':
-            # self.backbone = resnet.resnet50(pretrained=True)
-            self.backbone = resnet50_vdb(pretrained=True)
+            self.backbone = resnet.resnet50(pretrained=True)
+            # self.backbone = resnet50_vdb(pretrained=True)
             self.feat_ids = list(range(4, 17))
             self.extract_feats = extract_feat_res
             nbottlenecks = [3, 4, 6, 3]
