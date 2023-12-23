@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument('--logpath', type=str, default='test_case')
     parser.add_argument('--bsz', type=int, default=2)
     parser.add_argument('--lr', type=float, default=5e-5)
-    parser.add_argument('--niter', type=int, default=55)
+    parser.add_argument('--niter', type=int, default=70)
     parser.add_argument('--nworker', type=int, default=0)
     parser.add_argument('--fold', type=int, default=4, choices=[0, 1, 2, 3, 4])
     parser.add_argument('--backbone', type=str, default='resnet50', choices=['vgg16', 'resnet50'])
