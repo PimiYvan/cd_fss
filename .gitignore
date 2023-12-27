@@ -13,3 +13,4 @@ fewshot_data.zip
 SegmentationClassAug.zip
 
 logs/
+.log/ 

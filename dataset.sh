@@ -24,13 +24,14 @@ echo 'downloading Fss dataset'
 !mv ./fewshot_data/* ./Datasets_PATNET
 !rm -r ./fewshot_data
 !mv ./Datasets_PATNET/fewshot_data ./Datasets_PATNET/FSS-1000
-
+rm fewshot_data.zip
+rm SegmentationClassAug.zip
 
 python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "my-logs"
 
 https://pytorch.org/get-started/previous-versions/
 
-
+salloc --time=1:0:0 --mem=3G --ntasks=2 --account=def-menna --gres=gpu:1 --nodes=1
 
 x = torch.tensor([1,2]).cuda()
 torch.cuda.device_count()
