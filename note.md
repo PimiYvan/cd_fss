@@ -35,3 +35,8 @@ nano ~/.ssh/config
 
 nano ~/.ssh/id_rsa
 ssh -Tv graham.alliancecan.ca
+
+
+NB :
+1 epoch == 40 min 
+70 epoch == 50heure,

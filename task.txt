@@ -11,4 +11,7 @@ salloc --time=1:0:0 --mem=3G --ntasks=2 --account=def-menna --gres=gpu:1 --nodes
 seff 13364120
 seff 13494113
 seff 13760292
+seff 14451589
+
+python test.py --backbone resnet50 --benchmark fss --nshot 1 --load  "logs/my-logs.log/best_model.pt"
 

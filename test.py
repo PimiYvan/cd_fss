@@ -42,7 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('--datapath', type=str, default='../CDFSL')
     parser.add_argument('--benchmark', type=str, default='fss', choices=['fss', 'deepglobe', 'isic', 'lung'])
     parser.add_argument('--logpath', type=str, default='./')
-    parser.add_argument('--bsz', type=int, default=30)
+    parser.add_argument('--bsz', type=int, default=10)
     parser.add_argument('--nworker', type=int, default=0)
     parser.add_argument('--load', type=str, default='path_to_your_trained_model')
     parser.add_argument('--fold', type=int, default=0)

@@ -37,11 +37,7 @@ x = torch.tensor([1,2]).cuda()
 torch.cuda.device_count()
 
 
-pip3 install torch torchvision
-pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
-pip install torch==1.9.1+cu102 torchvision==0.10.1+cu102 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
-pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
-
+!python test.py --backbone resnet50 --benchmark fss --nshot 1 --load "my_logs.log/best_model.pt"
 
 
 
