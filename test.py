@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
     # Arguments parsing
     parser = argparse.ArgumentParser(description='Cross-Domain Few-Shot Semantic Segmentation Pytorch Implementation')
-    parser.add_argument('--datapath', type=str, default='../CDFSL')
+    parser.add_argument('--datapath', type=str, default='./Datasets_PATNET')
     parser.add_argument('--benchmark', type=str, default='fss', choices=['fss', 'deepglobe', 'isic', 'lung'])
     parser.add_argument('--logpath', type=str, default='./')
     parser.add_argument('--bsz', type=int, default=10)
