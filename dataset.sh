@@ -6,6 +6,7 @@ echo 'downloading pascal'
 
 # pip3.9 install gdown 
 !pip install gdown #python 3.8 at least 
+cd cd_fss
 
 echo 'downloading segmentation class of pascal'
 !gdown 10zxG2VExoEZUeyQl_uXga2OWHjGeZaf2
@@ -26,6 +27,12 @@ echo 'downloading Fss dataset'
 !mv ./Datasets_PATNET/fewshot_data ./Datasets_PATNET/FSS-1000
 rm fewshot_data.zip
 rm SegmentationClassAug.zip
+
+gdown 10qsi1NRyFKFyoIq1gAKDab6xkbE0Vc74
+unzip Deepglobe.zip
+mv ./Deepglobe ./Datasets_PATNET
+rm Deepglobe.zip
+!python test.py --backbone resnet50 --benchmark deepglobe --nshot 1 --load "logs/my_logs.log/best_model.pt"
 
 python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "my-logs"
 

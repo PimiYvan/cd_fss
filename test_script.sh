@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------
 # The following three commands allow us to take advantage of whole-node scheduling
 # ---------------------------------------------------------------------
-#SBATCH --gres=gpu:1 
+#SBATCH --gres=gpu:1
 #SBATCH --nodes=1
 #SBATCH --ntasks=2
 #SBATCH --mem=32G
@@ -15,7 +15,7 @@
 # ---------------------------------------------------------------------
 # Wall time
 # ---------------------------------------------------------------------
-#SBATCH --time=45:30:00
+#SBATCH --time=00:10:00
 # ---------------------------------------------------------------------
 # Job output
 # ---------------------------------------------------------------------
@@ -68,6 +68,6 @@ pip install --no-index tensorboardX
 # ---------------------------------------------------------------------
 export CUDA_VISIBLE_DEVICES=0
 cd cd_fss 
-python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 5e-5 --bsz 10 --logpath "my-logs"
+python test.py --backbone resnet50 --benchmark fss --nshot 1 --load  "logs/my-logs.log/best_model.pt"
 # python test.py
 nvidia-smi
