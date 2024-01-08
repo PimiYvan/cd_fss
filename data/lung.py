@@ -84,6 +84,12 @@ class DatasetLung(Dataset):
         support_names = []
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
+            print(support_name, self.base_path)
+            if not os.path.isfile(support_name) : 
+                # print(' missing file with an issue ' + support_name)
+                # assert False, ' missing file with an issue ' + support_name
+                continue
+
             if query_name != support_name: support_names.append(support_name)
             if len(support_names) == self.shot: break
 

@@ -32,7 +32,19 @@ gdown 10qsi1NRyFKFyoIq1gAKDab6xkbE0Vc74
 unzip Deepglobe.zip
 mv ./Deepglobe ./Datasets_PATNET
 rm Deepglobe.zip
-!python test.py --backbone resnet50 --benchmark deepglobe --nshot 1 --load "logs/my_logs.log/best_model.pt"
+
+pip install -q kaggle
+kaggle datasets list
+kaggle datasets download -d nikhilpandey360/chest-xray-masks-and-labels
+cd cd_fss
+cp .kaggle/kaggle.json /home/yvan2023/.kaggle/
+kaggle datasets download -d nikhilpandey360/chest-xray-masks-and-labels
+unzip chest-xray-masks-and-labels.zip
+mv "./Lung Segmentation" "./LungSegmentation"
+mv ./LungSegmentation/ ./Datasets_PATNET/
+
+python test.py --backbone resnet50 --benchmark deepglobe --nshot 1 --load "logs/my-logs.log/best_model.pt"
+python test.py --backbone resnet50 --benchmark lung --nshot 1 --load "logs/my-logs.log/best_model.pt"
 
 python train.py --backbone resnet50  --fold 4  --benchmark pascal --lr 1e-3 --bsz 20 --logpath "my-logs"
 
