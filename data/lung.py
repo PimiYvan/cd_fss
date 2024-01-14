@@ -32,8 +32,9 @@ class DatasetLung(Dataset):
 
     def __getitem__(self, idx):
         query_name, support_names, class_sample = self.sample_episode(idx)
+        print(query_name, support_names, class_sample, 'is still sampling')
         query_img, query_mask, support_imgs, support_masks = self.load_frame(query_name, support_names)
-
+        print('loading frame')
         query_img = self.transform(query_img)
         query_mask = F.interpolate(query_mask.unsqueeze(0).unsqueeze(0).float(), query_img.size()[-2:], mode='nearest').squeeze()
 
@@ -84,7 +85,7 @@ class DatasetLung(Dataset):
         support_names = []
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
-            print(support_name, self.base_path)
+            # print(support_name, self.base_path)
             if not os.path.isfile(support_name) : 
                 # print(' missing file with an issue ' + support_name)
                 # assert False, ' missing file with an issue ' + support_name
