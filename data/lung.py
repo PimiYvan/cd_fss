@@ -65,8 +65,8 @@ class DatasetLung(Dataset):
         query_id = query_name[:-9] + '.png'
         query_img = Image.open(os.path.join(self.img_path, os.path.basename(query_id))).convert('RGB')
 
-        # support_ids = [os.path.basename(name)[:-9] + '.png' for name in support_names]
-        support_ids = [os.path.basename(name) for name in support_names]
+        support_ids = [os.path.basename(name)[:-9] + '.png' for name in support_names]
+        # support_ids = [os.path.basename(name) for name in support_names]
         # print(support_ids, 'in load frame')
         support_names = [os.path.join(self.img_path, sid) for sid in support_ids]
         support_imgs = [Image.open(name).convert('RGB') for name in support_names]
