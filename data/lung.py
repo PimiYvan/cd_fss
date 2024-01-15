@@ -32,9 +32,9 @@ class DatasetLung(Dataset):
 
     def __getitem__(self, idx):
         query_name, support_names, class_sample = self.sample_episode(idx)
-        print(query_name, support_names, class_sample, 'is still sampling')
+        # print(query_name, support_names, class_sample, 'is still sampling')
         query_img, query_mask, support_imgs, support_masks = self.load_frame(query_name, support_names)
-        print('loading frame')
+        # print('loading frame')
         query_img = self.transform(query_img)
         query_mask = F.interpolate(query_mask.unsqueeze(0).unsqueeze(0).float(), query_img.size()[-2:], mode='nearest').squeeze()
 
@@ -65,8 +65,9 @@ class DatasetLung(Dataset):
         query_id = query_name[:-9] + '.png'
         query_img = Image.open(os.path.join(self.img_path, os.path.basename(query_id))).convert('RGB')
 
-        support_ids = [os.path.basename(name)[:-9] + '.png' for name in support_names]
-        print(support_ids, 'in load frame')
+        # support_ids = [os.path.basename(name)[:-9] + '.png' for name in support_names]
+        support_ids = [os.path.basename(name) for name in support_names]
+        # print(support_ids, 'in load frame')
         support_names = [os.path.join(self.img_path, sid) for sid in support_ids]
         support_imgs = [Image.open(name).convert('RGB') for name in support_names]
 
@@ -87,11 +88,10 @@ class DatasetLung(Dataset):
         while True:  # keep sampling support set if query == support
             support_name = np.random.choice(self.img_metadata_classwise[class_sample], 1, replace=False)[0]
             # print(support_name, self.base_path)
-            if not os.path.isfile(support_name) : 
-                # print(' missing file with an issue ' + support_name)
-                # assert False, ' missing file with an issue ' + support_name
-                continue
-
+            # if not os.path.isfile(support_name) : 
+            #     # print(' missing file with an issue ' + support_name)
+            #     # assert False, ' missing file with an issue ' + support_name
+            #     continue
             if query_name != support_name: support_names.append(support_name)
             if len(support_names) == self.shot: break
 
