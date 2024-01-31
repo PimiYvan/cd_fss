@@ -69,3 +69,17 @@ Model saved @31 w/ val. mIoU: 73.26.
 
 
 ************************************************************
+
+
+
+
+Result while testing : 
+
+
+Dataset             1 shot/from the paper                   5 shot / From the paper 
+FSS                 76.30 / 78.59                             80.39 / 81.23
+DEEPGLOBE           30.51 / 37.89                             36.25 / 42.97
+CHEST XRAY          61.66 /  66.61                            65.55 / 70.20
+
+
+

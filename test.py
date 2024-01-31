@@ -4,7 +4,8 @@ import argparse
 import torch.nn as nn
 import torch
 
-from model.patnet import PATNetwork
+# from model.patnet import PATNetwork
+from model.patnet_vdb import PATNetwork
 from common.logger import Logger, AverageMeter
 from common.evaluation import Evaluator
 from common import utils
@@ -47,7 +48,8 @@ if __name__ == '__main__':
     parser.add_argument('--load', type=str, default='path_to_your_trained_model')
     parser.add_argument('--fold', type=int, default=0)
     parser.add_argument('--nshot', type=int, default=1)
-    parser.add_argument('--backbone', type=str, default='resnet50', choices=['vgg16', 'resnet50'])
+    # parser.add_argument('--backbone', type=str, default='resnet50', choices=['vgg16', 'resnet50'])
+    parser.add_argument('--backbone', type=str, default='resnet50_vdb', choices=['vgg16', 'resnet50', 'resnet50_vdb'])
     args = parser.parse_args()
     Logger.initialize(args, training=False)
 
