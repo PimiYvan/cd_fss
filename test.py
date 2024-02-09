@@ -27,14 +27,14 @@ def test(model, dataloader, nshot):
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         end_time = datetime.now()
         print('Duration: {}'.format(end_time - start_time))
-        mean_time = end_time - start_time
+        mean_time += end_time - start_time
         size += 1 
         assert pred_mask.size() == batch['query_mask'].size()
         # 2. Evaluate prediction
         area_inter, area_union = Evaluator.classify_prediction(pred_mask.clone(), batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss=None)
         average_meter.write_process(idx, len(dataloader), epoch=-1, write_batch_idx=1)
-        
+
     print('Average Duration: {}'.format(mean_time/size))
     # Write evaluation results
     average_meter.write_result('Test', 0)
