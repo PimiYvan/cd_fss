@@ -10,7 +10,7 @@ from common.logger import Logger, AverageMeter
 from common.evaluation import Evaluator
 from common import utils
 from data.dataset import FSSDataset
-
+from datetime import datetime
 
 def test(model, dataloader, nshot):
     r""" Test PATNet """
@@ -18,17 +18,24 @@ def test(model, dataloader, nshot):
     # Freeze randomness during testing for reproducibility if needed
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
-
+    mean_time = 0
+    size = 0
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
+        start_time = datetime.now()
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        end_time = datetime.now()
+        print('Duration: {}'.format(end_time - start_time))
+        mean_time = end_time - start_time
+        size += 1 
         assert pred_mask.size() == batch['query_mask'].size()
         # 2. Evaluate prediction
         area_inter, area_union = Evaluator.classify_prediction(pred_mask.clone(), batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss=None)
         average_meter.write_process(idx, len(dataloader), epoch=-1, write_batch_idx=1)
-
+        
+    print('Average Duration: {}'.format(mean_time/size))
     # Write evaluation results
     average_meter.write_result('Test', 0)
     miou, fb_iou = average_meter.compute_iou()
