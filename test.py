@@ -27,7 +27,7 @@ def test(model, dataloader, nshot):
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         end_time = datetime.now()
         print('Duration: {}'.format(end_time - start_time))
-        mean_time += end_time - start_time
+        mean_time += (end_time - start_time).total_seconds()
         size += 1 
         assert pred_mask.size() == batch['query_mask'].size()
         # 2. Evaluate prediction
