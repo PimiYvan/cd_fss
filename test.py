@@ -26,11 +26,11 @@ def test(model, dataloader, nshot):
 
         ###
         start_time = datetime.now()
-        pred_mask = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
-        # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        finetune_value = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
+        pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         end_time = datetime.now()
         ###
-
+        print(finetune_value, finetune_value.shape)
         ### summing the time 
         print('Duration: {}'.format(end_time - start_time))
         mean_time += (end_time - start_time).total_seconds()
@@ -41,6 +41,7 @@ def test(model, dataloader, nshot):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask.clone(), batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss=None)
         average_meter.write_process(idx, len(dataloader), epoch=-1, write_batch_idx=1)
+        break 
 
     print('Average Duration: {}'.format(mean_time/size))
     # Write evaluation results
