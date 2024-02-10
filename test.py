@@ -23,12 +23,19 @@ def test(model, dataloader, nshot):
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
+
+        ###
         start_time = datetime.now()
-        pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        pred_mask = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
+        # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         end_time = datetime.now()
+        ###
+
+        ### summing the time 
         print('Duration: {}'.format(end_time - start_time))
         mean_time += (end_time - start_time).total_seconds()
         size += 1 
+        ###
         assert pred_mask.size() == batch['query_mask'].size()
         # 2. Evaluate prediction
         area_inter, area_union = Evaluator.classify_prediction(pred_mask.clone(), batch)
