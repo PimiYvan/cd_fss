@@ -41,7 +41,7 @@ def test(model, dataloader, nshot):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask.clone(), batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss=None)
         average_meter.write_process(idx, len(dataloader), epoch=-1, write_batch_idx=1)
-        break 
+        # break 
 
     print('Average Duration: {}'.format(mean_time/size))
     # Write evaluation results
