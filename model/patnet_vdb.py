@@ -152,6 +152,10 @@ class PATNetwork(nn.Module):
         dist = F.cosine_similarity(feature, prototype[..., None, None], dim=1) * scaler
         return dist # dist:[1,53,53]
 
+
+    # for me finetuning should not use the query mask, it should use the support information and then we should predict the query mask
+    # unless if we have a dataset, and we want to use one part of that dataset for the adaptation of a model. in that case the model layer should be updated
+    # like 
     def finetune_reference(self, batch, query_mask, nshot):
         # Perform multiple prediction given (nshot) number of different support sets
         kl_agg = 0
@@ -171,7 +175,7 @@ class PATNetwork(nn.Module):
                 if idx <= 3:
                     kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
             kl_agg += kl
-            cos_agg += cos / 4
+            cos_agg += cos / 4 # it should be always equal to zero 0, so it unusefull 
 
             if nshot == 1: return kl_agg
 
