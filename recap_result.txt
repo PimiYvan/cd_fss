@@ -79,7 +79,7 @@ Result while testing :
 Dataset             1 shot/from the paper                   5 shot / From the paper 
 FSS                 76.30 / 78.59                             80.39 / 81.23
 DEEPGLOBE           30.51 / 37.89                             36.25 / 42.97
-CHEST XRAY          61.66 /  66.61                            65.55 / 70.20
+CHEST XRAY(lung)    61.66 /  66.61                            65.55 / 70.20
 
 
 
@@ -88,4 +88,4 @@ Result combinaison with VDB :
 Dataset             1 shot/                         5shot 
 FSS                 75.10                           80.00  
 DEEPGLOBE           28.32                           33.36
-CHEST XRAY                                          67.37
+CHEST XRAY          63.51                           67.37

@@ -11,6 +11,7 @@ from common.evaluation import Evaluator
 from common import utils
 from data.dataset import FSSDataset
 from datetime import datetime
+import torch.optim as optim
 
 def test(model, dataloader, nshot):
     r""" Test PATNet """
@@ -20,14 +21,28 @@ def test(model, dataloader, nshot):
     average_meter = AverageMeter(dataloader.dataset)
     mean_time = 0
     size = 0
+    LR = 0.001
+    params_to_update = []
+    for name,param in model.named_parameters():
+        if param.requires_grad == True:
+            params_to_update.append(param)
+    print(len(params_to_update), 'number of params to update')
+    optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
 
         ###
         start_time = datetime.now()
-        # model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
-        pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        # m
+        
+        for i in range(5):
+            pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+            loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+            loss.backward()
+            optimizer_ft.step()
+
         end_time = datetime.now()
         ###
         # print(finetune_value, finetune_value.shape)
@@ -91,7 +106,10 @@ if __name__ == '__main__':
     dataloader_test = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, args.fold, 'test', args.nshot)
 
     # Test PATNet
-    with torch.no_grad():
-        test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    # with torch.no_grad():
+    #     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+
+    test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+
     Logger.info('mIoU: %5.2f \t FB-IoU: %5.2f' % (test_miou.item(), test_fb_iou.item()))
     Logger.info('==================== Finished Testing ====================')
