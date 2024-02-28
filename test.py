@@ -24,8 +24,8 @@ def test(model, dataloader, nshot):
     LR = 0.001
     params_to_update = []
     for name,param in model.named_parameters():
-        print(name)
-        if param.requires_grad == True:
+        if param.requires_grad == True and 'backbone' not in name and 'hpn_learner' not in name:
+            print(name)
             params_to_update.append(param)
     print(len(params_to_update), 'number of params to update')
     optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
