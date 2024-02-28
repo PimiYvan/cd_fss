@@ -41,6 +41,7 @@ def test(model, dataloader, nshot):
         for i in range(5):
             pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
             loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+            loss.requires_grad = True
             loss.backward()
             optimizer_ft.step()
 
