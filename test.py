@@ -19,7 +19,7 @@ def test(model, dataloader, nshot):
     # Freeze randomness during testing for reproducibility if needed
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
-    model.requires_grad_(True)
+    # model.requires_grad_(True)
     mean_time = 0
     size = 0
     LR = 0.001
@@ -45,7 +45,7 @@ def test(model, dataloader, nshot):
         
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        # loss.requires_grad = True
+        loss.requires_grad = True
         loss.backward()
         optimizer_ft.step()
         # for i in range(5):
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     parser.add_argument('--datapath', type=str, default='./Datasets_PATNET')
     parser.add_argument('--benchmark', type=str, default='fss', choices=['fss', 'deepglobe', 'isic', 'lung'])
     parser.add_argument('--logpath', type=str, default='./')
-    parser.add_argument('--bsz', type=int, default=2)
+    parser.add_argument('--bsz', type=int, default=5)
     parser.add_argument('--nworker', type=int, default=0)
     parser.add_argument('--load', type=str, default='path_to_your_trained_model')
     parser.add_argument('--fold', type=int, default=0)
