@@ -116,13 +116,13 @@ if __name__ == '__main__':
     # Dataset initialization
     FSSDataset.initialize(img_size=400, datapath=args.datapath)
     dataloader_test = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, args.fold, 'test', args.nshot)
-
+    print(len(dataloader_test), 'dataloader size')
     # Test PATNet
     # with torch.no_grad():
     #     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
-    # torch.set_grad_enabled(True)  # Context-manager 
-    with torch.no_grad():
-        test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    torch.set_grad_enabled(True)  # Context-manager 
+
+    test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
 
     Logger.info('mIoU: %5.2f \t FB-IoU: %5.2f' % (test_miou.item(), test_fb_iou.item()))
     Logger.info('==================== Finished Testing ====================')
