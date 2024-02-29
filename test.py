@@ -19,6 +19,7 @@ def test(model, dataloader, nshot):
     # Freeze randomness during testing for reproducibility if needed
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
+    model.requires_grad_(True)
     mean_time = 0
     size = 0
     LR = 0.001
@@ -30,8 +31,9 @@ def test(model, dataloader, nshot):
         if param.requires_grad == True and 'reference_layer' in name:
             print(name)
             params_to_update.append(param)
-    print(len(params_to_update), 'number of params to update')
-    optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+    # print(len(params_to_update), 'number of params to update')
+    # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+    optimizer_ft = optim.Adam(params_to_update, lr=LR,)
 
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
@@ -41,12 +43,17 @@ def test(model, dataloader, nshot):
         start_time = datetime.now()
         # m
         
-        for i in range(5):
-            pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
-            loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-            loss.requires_grad = True
-            loss.backward()
-            optimizer_ft.step()
+        pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        # loss.requires_grad = True
+        loss.backward()
+        optimizer_ft.step()
+        # for i in range(5):
+        #     pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        #     loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        #     loss.requires_grad = True
+        #     loss.backward()
+        #     optimizer_ft.step()
 
         end_time = datetime.now()
         ###
@@ -113,6 +120,7 @@ if __name__ == '__main__':
     # Test PATNet
     # with torch.no_grad():
     #     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    torch.set_grad_enabled(True)  # Context-manager 
 
     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
 
