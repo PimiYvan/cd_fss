@@ -120,9 +120,9 @@ if __name__ == '__main__':
     # Test PATNet
     # with torch.no_grad():
     #     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
-    torch.set_grad_enabled(True)  # Context-manager 
-
-    test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    # torch.set_grad_enabled(True)  # Context-manager 
+    with torch.no_grad():
+        test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
 
     Logger.info('mIoU: %5.2f \t FB-IoU: %5.2f' % (test_miou.item(), test_fb_iou.item()))
     Logger.info('==================== Finished Testing ====================')
