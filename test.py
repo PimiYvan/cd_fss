@@ -44,10 +44,11 @@ def test(model, dataloader, nshot):
         # m
         
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
-        loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        loss.requires_grad = True
-        loss.backward()
-        optimizer_ft.step()
+        # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        # loss.requires_grad = True
+        # loss.backward()
+        # optimizer_ft.step()
+
         # for i in range(5):
         #     pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         #     loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
@@ -77,6 +78,36 @@ def test(model, dataloader, nshot):
 
     return miou, fb_iou
 
+def finetuning(model, dataloader, nshot):
+    utils.fix_randseed(0)
+    average_meter = AverageMeter(dataloader.dataset)
+    model.module.train_mode()
+
+    size = 0
+    LR = 0.001
+    params_to_update = []
+    for name,param in model.named_parameters():
+        if param.requires_grad == True and 'reference_layer' in name:
+            print(name)
+            params_to_update.append(param)
+
+    # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+    optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
+    k = 0 
+    for idx, batch in enumerate(dataloader):
+        k += 1 
+        # 1. PATNetworks forward pass
+        batch = utils.to_cuda(batch)
+        logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
+        pred_mask = logit_mask.argmax(dim=1)
+        # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
+        loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        # loss.requires_grad = True
+        loss.backward()
+        optimizer_ft.step()
+
+        if k > 15:
+            break 
 
 if __name__ == '__main__':
 
@@ -97,7 +128,7 @@ if __name__ == '__main__':
 
     # Model initialization
     model = PATNetwork(args.backbone)
-    model.eval()
+    model.train()
     Logger.log_params(model)
 
     # Device setup
@@ -116,13 +147,19 @@ if __name__ == '__main__':
     # Dataset initialization
     FSSDataset.initialize(img_size=400, datapath=args.datapath)
     dataloader_test = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, args.fold, 'test', args.nshot)
-    print(len(dataloader_test), 'dataloader size')
+    # FSSDataset.initialize(img_size=400, datapath=args.datapath)
+    # dataloader_val = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, '0', 'val')
+    # print(len(dataloader_test), 'dataloader size')
     # Test PATNet
-    # with torch.no_grad():
-    #     test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
-    torch.set_grad_enabled(True)  # Context-manager 
-
-    test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    for epoch in range(3):
+        trn_loss, trn_miou, trn_fb_iou = finetuning(epoch, model, dataloader_test, training=True)
+    
+    model.eval()
+    with torch.no_grad():
+        test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
+    
+    # torch.set_grad_enabled(True)  # Context-manager 
+    # test_miou, test_fb_iou = test(model, dataloader_test, args.nshot)
 
     Logger.info('mIoU: %5.2f \t FB-IoU: %5.2f' % (test_miou.item(), test_fb_iou.item()))
     Logger.info('==================== Finished Testing ====================')
