@@ -106,9 +106,19 @@ def finetuning(model, dataloader, nshot):
         loss.backward()
         optimizer_ft.step()
 
+        area_inter, area_union = Evaluator.classify_prediction(pred_mask, batch)
+        average_meter.update(area_inter, area_union, batch['class_id'], loss.detach().clone())
+        average_meter.write_process(idx, len(dataloader), epoch, write_batch_idx=50)
         if k > 15:
             break 
 
+    # Write evaluation results
+    average_meter.write_result('Training', epoch)
+    avg_loss = utils.mean(average_meter.loss_buf)
+    miou, fb_iou = average_meter.compute_iou()
+
+    return avg_loss, miou, fb_iou
+    
 if __name__ == '__main__':
 
     # Arguments parsing
