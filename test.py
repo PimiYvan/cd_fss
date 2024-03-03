@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # print(len(dataloader_test), 'dataloader size')
     # Test PATNet
     for epoch in range(3):
-        trn_loss, trn_miou, trn_fb_iou = finetuning(epoch, model, dataloader_test, training=True)
+        trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, args.nshot)
     
     model.eval()
     with torch.no_grad():
