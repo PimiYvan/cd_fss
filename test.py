@@ -23,17 +23,17 @@ def test(model, dataloader, nshot):
     mean_time = 0
     size = 0
     LR = 0.001
-    params_to_update = []
-    for name,param in model.named_parameters():
-        # if param.requires_grad == True and 'backbone' not in name and 'hpn_learner' not in name:
-        #     print(name)
-        #     params_to_update.append(param)
-        if param.requires_grad == True and 'reference_layer' in name:
-            print(name)
-            params_to_update.append(param)
-    # print(len(params_to_update), 'number of params to update')
-    # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
-    optimizer_ft = optim.Adam(params_to_update, lr=LR,)
+    # params_to_update = []
+    # for name,param in model.named_parameters():
+    #     # if param.requires_grad == True and 'backbone' not in name and 'hpn_learner' not in name:
+    #     #     print(name)
+    #     #     params_to_update.append(param)
+    #     if param.requires_grad == True and 'reference_layer' in name:
+    #         print(name)
+    #         params_to_update.append(param)
+    # # print(len(params_to_update), 'number of params to update')
+    # # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+    # optimizer_ft = optim.Adam(params_to_update, lr=LR,)
 
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
@@ -78,21 +78,11 @@ def test(model, dataloader, nshot):
 
     return miou, fb_iou
 
-def finetuning(model, dataloader, nshot):
+def finetuning(model, dataloader, optimizer_ft, nshot):
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
     model.module.train_mode()
 
-    size = 0
-    LR = 0.001
-    params_to_update = []
-    for name,param in model.named_parameters():
-        if param.requires_grad == True and 'reference_layer' in name:
-            print(name)
-            params_to_update.append(param)
-
-    # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
-    optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
     k = 0 
     for idx, batch in enumerate(dataloader):
         k += 1 
@@ -102,7 +92,6 @@ def finetuning(model, dataloader, nshot):
         pred_mask = logit_mask.argmax(dim=1)
         # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        # loss.requires_grad = True
         loss.backward()
         optimizer_ft.step()
 
@@ -118,7 +107,7 @@ def finetuning(model, dataloader, nshot):
     miou, fb_iou = average_meter.compute_iou()
 
     return avg_loss, miou, fb_iou
-    
+
 if __name__ == '__main__':
 
     # Arguments parsing
@@ -161,8 +150,17 @@ if __name__ == '__main__':
     # dataloader_val = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, '0', 'val')
     # print(len(dataloader_test), 'dataloader size')
     # Test PATNet
+    LR = 0.001
+    params_to_update = []
+    for name,param in model.named_parameters():
+        if param.requires_grad == True and 'reference_layer' in name:
+            print(name)
+            params_to_update.append(param)
+
+    # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
+    optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
     for epoch in range(3):
-        trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, args.nshot)
+        trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot)
     
     model.eval()
     with torch.no_grad():
