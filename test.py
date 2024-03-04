@@ -92,6 +92,9 @@ def finetuning(model, dataloader, optimizer_ft, nshot):
         pred_mask = logit_mask.argmax(dim=1)
         # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
+
+        optimizer_ft.zero_grad()
         loss.backward()
         optimizer_ft.step()
 
@@ -150,7 +153,7 @@ if __name__ == '__main__':
     # dataloader_val = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, '0', 'val')
     # print(len(dataloader_test), 'dataloader size')
     # Test PATNet
-    LR = 0.001
+    LR = 0.0001
     params_to_update = []
     for name,param in model.named_parameters():
         if param.requires_grad == True and 'reference_layer' in name:
