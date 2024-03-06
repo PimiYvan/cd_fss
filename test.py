@@ -101,7 +101,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask, batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss.detach().clone())
         average_meter.write_process(idx, len(dataloader), epoch, write_batch_idx=50)
-        if k > 15:
+        if k > 40:
             break 
 
     # Write evaluation results
