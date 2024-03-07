@@ -22,6 +22,7 @@ seff 16968623
 seff 17341033
 seff 17557949
 seff 17566373
+seff 17581983
 
 
 python test.py --backbone resnet50 --benchmark fss --nshot 1 --load  "logs/my-logs.log/best_model.pt"
