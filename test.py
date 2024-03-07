@@ -82,7 +82,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
     model.module.train_mode()
-
+    torch.set_grad_enabled(True)  
     k = 0 
     for idx, batch in enumerate(dataloader):
         k += 1 
