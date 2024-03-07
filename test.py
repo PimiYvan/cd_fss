@@ -78,7 +78,7 @@ def test(model, dataloader, nshot):
 
     return miou, fb_iou
 
-def finetuning(model, dataloader, optimizer_ft, nshot):
+def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
     utils.fix_randseed(0)
     average_meter = AverageMeter(dataloader.dataset)
     model.module.train_mode()
@@ -105,7 +105,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot):
             break 
 
     # Write evaluation results
-    average_meter.write_result('Training', epoch)
+    average_meter.write_result('Finetuning', epoch)
     avg_loss = utils.mean(average_meter.loss_buf)
     miou, fb_iou = average_meter.compute_iou()
 
@@ -130,7 +130,8 @@ if __name__ == '__main__':
 
     # Model initialization
     model = PATNetwork(args.backbone)
-    model.module.train_mode()
+    # model.module.train_mode()
+    # model.train()
     Logger.log_params(model)
 
     # Device setup
@@ -152,6 +153,7 @@ if __name__ == '__main__':
     # FSSDataset.initialize(img_size=400, datapath=args.datapath)
     # dataloader_val = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, '0', 'val')
     # print(len(dataloader_test), 'dataloader size')
+    model.module.train_mode()
     # Test PATNet
     LR = 0.0001
     params_to_update = []
@@ -163,7 +165,7 @@ if __name__ == '__main__':
     # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
     # optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
     # for epoch in range(3):
-    #     trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot)
+    #     trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot, epoch)
     
     model.eval()
     with torch.no_grad():
