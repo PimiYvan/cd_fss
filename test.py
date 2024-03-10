@@ -97,7 +97,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         # or 
         # pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
         
-        loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
+        loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
 
         optimizer_ft.zero_grad()
@@ -107,8 +107,8 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask, batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss.detach().clone())
         average_meter.write_process(idx, len(dataloader), epoch, write_batch_idx=50)
-        if k > 40:
-            break 
+        # if k > 40:
+        #     break 
 
     # Write evaluation results
     average_meter.write_result('Finetuning', epoch)
@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
     # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
     optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
-    for epoch in range(3):
+    for epoch in range(1):
         trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot, epoch)
     
     model.module.eval()
