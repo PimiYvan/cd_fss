@@ -163,14 +163,14 @@ if __name__ == '__main__':
     # Test PATNet
     LR = 0.0001
     params_to_update = []
-    # for name,param in model.named_parameters():
-    #     if param.requires_grad == True and 'reference_layer' in name:
-    #         print(name)
-    #         params_to_update.append(param)
+    for name,param in model.named_parameters():
+        if param.requires_grad == True and 'reference_layer' in name:
+            print(name)
+            params_to_update.append(param)
 
     # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
-    # optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
-    optimizer_ft = optim.Adam([{"params": model.parameters(), 'lr':LR}])
+    optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
+    # optimizer_ft = optim.Adam([{"params": model.parameters(), 'lr':LR}])
     for epoch in range(1):
         trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot, epoch)
     
