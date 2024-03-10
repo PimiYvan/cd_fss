@@ -89,7 +89,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         k += 1 
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
-        print(idx, batch['query_img'].size(), batch['support_imgs'].size(), batch['support_imgs'].squeeze(1).size(), batch['support_masks'].squeeze(1).size())
+        # print(idx, batch['query_img'].size(), batch['support_imgs'].size(), batch['support_imgs'].squeeze(1).size(), batch['support_masks'].squeeze(1).size())
 
         logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
         pred_mask = logit_mask.argmax(dim=1)
@@ -169,9 +169,9 @@ if __name__ == '__main__':
             params_to_update.append(param)
 
     # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
-    # optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
-    # for epoch in range(3):
-    #     trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot, epoch)
+    optimizer_ft = optim.Adam([{"params":params_to_update, 'lr':LR}])
+    for epoch in range(3):
+        trn_loss, trn_miou, trn_fb_iou = finetuning(model, dataloader_test, optimizer_ft, args.nshot, epoch)
     
     model.module.eval()
     with torch.no_grad():
