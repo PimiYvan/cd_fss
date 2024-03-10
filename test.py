@@ -88,8 +88,8 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         k += 1 
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
-        print(batch['query_img'].size())
-        
+        print(batch['query_img'].size(), batch['support_imgs'].squeeze(1).size(), batch['support_masks'].squeeze(1).size())
+
         logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
         pred_mask = logit_mask.argmax(dim=1)
 
