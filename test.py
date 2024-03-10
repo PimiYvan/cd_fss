@@ -79,7 +79,8 @@ def test(model, dataloader, nshot):
     return miou, fb_iou
 
 def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
-    utils.fix_randseed(0)
+    # utils.fix_randseed(0)
+    utils.fix_randseed(None) 
     average_meter = AverageMeter(dataloader.dataset)
     model.module.train_mode()
     torch.set_grad_enabled(True)  
