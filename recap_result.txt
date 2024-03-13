@@ -89,3 +89,14 @@ Dataset             1 shot/                         5shot
 FSS                 75.10                           80.00  
 DEEPGLOBE           28.32                           33.36
 CHEST XRAY          63.51                           67.37
+
+Result :                         
+
+changes                                                                     1shot                                   5shot 
+model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)    76.30 (nothing changes)       
+model.module.compute_objective(logit_mask, batch['query_mask'])             76.73 (greater than)
+(we just update the reference)
+model.module.compute_objective(logit_mask, batch['query_mask'])             76.14 (greater than)
+(we update the reference and hpn layer)
+model.module.compute_objective(logit_mask, pred_mask)                       75.89(smaller than without finetuning)
+(we just update the reference)
