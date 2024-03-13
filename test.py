@@ -165,7 +165,8 @@ if __name__ == '__main__':
     LR = 0.0001
     params_to_update = []
     for name,param in model.named_parameters():
-        if param.requires_grad == True and ('reference_layer' in name or 'hpn_learner' in name):
+        # if param.requires_grad == True and ('reference_layer' in name or 'hpn_learner' in name):
+        if param.requires_grad == True and 'reference_layer' in name:
             print(name)
             params_to_update.append(param)
 
