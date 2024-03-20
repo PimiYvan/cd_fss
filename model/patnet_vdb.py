@@ -181,6 +181,25 @@ class PATNetwork(nn.Module):
 
         return kl_agg/nshot
 
+    def one_shot_finetune_reference(self, batch, query_mask, nshot):
+        s_idx = 0
+        support_feats_wo_mask = self.extract_feats(batch['support_imgs'][:, s_idx], self.backbone, self.feat_ids,
+                                            self.bottleneck_ids, self.lids)
+        support_feats, prototypes_sf, prototypes_sb = self.mask_feature(support_feats_wo_mask,
+                                                                        batch['support_masks'][:, s_idx].clone())
+        query_feats = self.extract_feats(batch['query_img'], self.backbone, self.feat_ids, self.bottleneck_ids, self.lids)
+        query_feats, prototypes_qf, prototypes_qb = self.mask_feature(query_feats, query_mask)
+
+        kl = 0
+        cos = 0
+
+        for idx, feature in enumerate(prototypes_qf):
+            if idx <= 3:
+                kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
+        kl_agg += kl
+        cos_agg += cos / 4 # it should be always equal to zero 0, so it unusefull 
+
+        return kl_agg
 
     def predict_mask_nshot(self, batch, nshot):
 
