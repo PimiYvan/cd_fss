@@ -183,6 +183,8 @@ class PATNetwork(nn.Module):
 
     def one_shot_finetune_reference(self, batch, query_mask,):
         s_idx = 0
+        kl_agg = 0 
+        cos_agg = 0
         support_feats_wo_mask = self.extract_feats(batch['support_imgs'][:, s_idx], self.backbone, self.feat_ids,
                                             self.bottleneck_ids, self.lids)
         support_feats, prototypes_sf, prototypes_sb = self.mask_feature(support_feats_wo_mask,
