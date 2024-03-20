@@ -23,17 +23,6 @@ def test(model, dataloader, nshot):
     mean_time = 0
     size = 0
     LR = 0.001
-    # params_to_update = []
-    # for name,param in model.named_parameters():
-    #     # if param.requires_grad == True and 'backbone' not in name and 'hpn_learner' not in name:
-    #     #     print(name)
-    #     #     params_to_update.append(param)
-    #     if param.requires_grad == True and 'reference_layer' in name:
-    #         print(name)
-    #         params_to_update.append(param)
-    # # print(len(params_to_update), 'number of params to update')
-    # # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
-    # optimizer_ft = optim.Adam(params_to_update, lr=LR,)
 
     for idx, batch in enumerate(dataloader):
         # 1. PATNetworks forward pass
@@ -41,25 +30,9 @@ def test(model, dataloader, nshot):
 
         ###
         start_time = datetime.now()
-        # m
-        
         pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
-        # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        # loss.requires_grad = True
-        # loss.backward()
-        # optimizer_ft.step()
-
-        # for i in range(5):
-        #     pred_mask = model.module.predict_mask_nshot(batch, nshot=nshot)
-        #     loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        #     loss.requires_grad = True
-        #     loss.backward()
-        #     optimizer_ft.step()
-
         end_time = datetime.now()
-        ###
-        # print(finetune_value, finetune_value.shape)
-        ### summing the time 
+
         # print('Duration: {}'.format(end_time - start_time))
         mean_time += (end_time - start_time).total_seconds()
         size += 1 
@@ -94,7 +67,6 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
         pred_mask = logit_mask.argmax(dim=1)
 
-        
         loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
@@ -156,9 +128,8 @@ if __name__ == '__main__':
     # Dataset initialization
     FSSDataset.initialize(img_size=400, datapath=args.datapath)
     dataloader_test = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, args.fold, 'test', args.nshot)
-    # FSSDataset.initialize(img_size=400, datapath=args.datapath)
-    # dataloader_val = FSSDataset.build_dataloader(args.benchmark, args.bsz, args.nworker, '0', 'val')
-    # print(len(dataloader_test), 'dataloader size')
+
+
     model.module.train_mode()
     # Test PATNet
     LR = 0.0001
