@@ -181,7 +181,7 @@ class PATNetwork(nn.Module):
 
         return kl_agg/nshot
 
-    def one_shot_finetune_reference(self, batch, query_mask, nshot):
+    def one_shot_finetune_reference(self, batch, query_mask,):
         s_idx = 0
         support_feats_wo_mask = self.extract_feats(batch['support_imgs'][:, s_idx], self.backbone, self.feat_ids,
                                             self.bottleneck_ids, self.lids)
