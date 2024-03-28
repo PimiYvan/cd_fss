@@ -65,7 +65,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         # print(idx, batch['query_img'].size(), batch['support_imgs'].size(), batch['support_imgs'].squeeze(1).size(), batch['support_masks'].squeeze(1).size())
 
         logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
-        # pred_mask = logit_mask.argmax(dim=1)
+        pred_mask = logit_mask.argmax(dim=1)
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         loss = model.module.finetune_reference(batch, logit_mask, nshot=nshot)
