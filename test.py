@@ -68,7 +68,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         pred_mask = logit_mask.argmax(dim=1)
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
-        loss = model.module.finetune_reference(batch, logit_mask, nshot=nshot)
+        loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         
         # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
