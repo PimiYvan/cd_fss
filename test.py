@@ -69,7 +69,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        
+        print(loss)
         # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
         # loss = model.module.compute_objective(logit_mask, pred_mask)
@@ -81,8 +81,8 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         area_inter, area_union = Evaluator.classify_prediction(pred_mask, batch)
         average_meter.update(area_inter, area_union, batch['class_id'], loss.detach().clone())
         average_meter.write_process(idx, len(dataloader), epoch, write_batch_idx=50)
-        # if k > 40:
-        #     break 
+        if k > 20:
+            break 
 
     # Write evaluation results
     average_meter.write_result('Finetuning', epoch)

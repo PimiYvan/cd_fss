@@ -173,8 +173,8 @@ class PATNetwork(nn.Module):
 
             for idx, feature in enumerate(prototypes_qf):
                 if idx <= 3:
-                    # kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
-                    kl += F.kl_div(feature.softmax(dim=-1), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
+                    kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
+                    # kl += F.kl_div(feature.softmax(dim=-1), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
             
             kl_agg += kl
             cos_agg += cos / 4 # it should be always equal to zero 0, so it unusefull 
