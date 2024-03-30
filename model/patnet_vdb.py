@@ -72,6 +72,7 @@ class PATNetwork(nn.Module):
         self.backbone.eval()
         self.hpn_learner = HPNLearner(list(reversed(nbottlenecks[-3:])))
         self.cross_entropy_loss = nn.CrossEntropyLoss()
+        self.kl_loss = nn.KLDivLoss(reduction="sum")
 
     def forward(self, query_img, support_img, support_mask):
         with torch.no_grad():
@@ -173,8 +174,10 @@ class PATNetwork(nn.Module):
 
             for idx, feature in enumerate(prototypes_qf):
                 if idx <= 3:
-                    kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
+                    # kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
                     # kl += F.kl_div(feature.softmax(dim=-1), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
+                    kl = self.kl_loss(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1),)
+
             
             kl_agg += kl
             cos_agg += cos / 4 # it should be always equal to zero 0, so it unusefull 
