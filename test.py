@@ -80,7 +80,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        # print(loss)
+        print(loss)
         # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
         # loss = model.module.compute_objective(logit_mask, pred_mask)
