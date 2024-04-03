@@ -57,15 +57,23 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
     average_meter = AverageMeter(dataloader.dataset)
     model.module.train_mode()
     torch.set_grad_enabled(True)  
+
     k = 0 
     for idx, batch in enumerate(dataloader):
         k += 1 
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
-        # batch.requires_grad = True
-        # print(idx, batch['query_img'].size(), batch['support_imgs'].size(), batch['support_imgs'].squeeze(1).size(), batch['support_masks'].squeeze(1).size())
+        query_img = batch['query_img']
+        support_imgs = batch['support_imgs']
+        support_masks = batch['support_masks']
 
-        logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
+        query_img.requires_grad = True
+        support_imgs.requires_grad = True
+        support_masks.requires_grad = True
+
+        logit_mask = model(query_img, support_imgs.squeeze(1), support_masks.squeeze(1))
+
+        # logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
         pred_mask = logit_mask.argmax(dim=1)
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
