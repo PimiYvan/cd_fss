@@ -13,6 +13,8 @@ from data.dataset import FSSDataset
 from datetime import datetime
 import torch.optim as optim
 
+
+
 def test(model, dataloader, nshot):
     r""" Test PATNet """
 
@@ -63,17 +65,17 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
         k += 1 
         # 1. PATNetworks forward pass
         batch = utils.to_cuda(batch)
-        query_img = batch['query_img']
-        support_imgs = batch['support_imgs']
-        support_masks = batch['support_masks']
+        # query_img = batch['query_img']
+        # support_imgs = batch['support_imgs']
+        # support_masks = batch['support_masks']
 
-        query_img.requires_grad = True
-        support_imgs.requires_grad = True
-        support_masks.requires_grad = True
+        # query_img.requires_grad = True
+        # support_imgs.requires_grad = True
+        # support_masks.requires_grad = True
 
-        logit_mask = model(query_img, support_imgs.squeeze(1), support_masks.squeeze(1))
+        # logit_mask = model(query_img, support_imgs.squeeze(1), support_masks.squeeze(1))
 
-        # logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
+        logit_mask = model(batch['query_img'], batch['support_imgs'].squeeze(1), batch['support_masks'].squeeze(1))
         pred_mask = logit_mask.argmax(dim=1)
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)

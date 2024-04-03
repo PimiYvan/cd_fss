@@ -13,6 +13,10 @@ from .base.correlation import Correlation
 from .learner import HPNLearner
 from .resnet_vdb import resnet18_vdb, resnet50_vdb
 
+def kl_div(x, y):
+    _kl = torch.sum(y * (torch.log(y) - x), -1)
+    return torch.mean(_kl)
+
 class PATNetwork(nn.Module):
     def __init__(self, backbone):
         super(PATNetwork, self).__init__()
@@ -176,7 +180,8 @@ class PATNetwork(nn.Module):
                 if idx <= 3:
                     # kl += F.kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
                     # kl += F.kl_div(feature.softmax(dim=-1), prototypes_sf[idx].softmax(dim=-1), reduction='sum')
-                    kl = self.kl_loss(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1),)
+                    # kl += self.kl_loss(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1),)
+                    kl += kl_div(feature.softmax(dim=-1).log(), prototypes_sf[idx].softmax(dim=-1),)
 
             
             kl_agg += kl
