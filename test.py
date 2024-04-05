@@ -80,7 +80,7 @@ def finetuning(model, dataloader, optimizer_ft, nshot, epoch):
 
         # loss = model.module.finetune_reference(batch, batch['query_mask'], nshot=nshot)
         loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
-        print(loss)
+        # print(loss)
         # loss = model.module.finetune_reference(batch, pred_mask, nshot=nshot)
         # loss = model.module.compute_objective(logit_mask, batch['query_mask'])
         # loss = model.module.compute_objective(logit_mask, pred_mask)
@@ -148,9 +148,9 @@ if __name__ == '__main__':
     LR = 0.0001
     params_to_update = []
     for name,param in model.named_parameters():
-        # if param.requires_grad == True and ('reference_layer' in name or 'hpn_learner' in name):
-        if param.requires_grad == True and 'reference_layer' in name:
-            print(name)
+        if param.requires_grad == True and ('reference_layer' in name or 'hpn_learner' in name):
+        # if param.requires_grad == True and 'reference_layer' in name:
+            # print(name)
             params_to_update.append(param)
 
     # optimizer_ft = optim.SGD(params_to_update, lr=LR, momentum=0.9)
