@@ -100,3 +100,11 @@ model.module.compute_objective(logit_mask, batch['query_mask'])             76.1
 (we update the reference and hpn layer)
 model.module.compute_objective(logit_mask, pred_mask)                       75.89(smaller than without finetuning)
 (we just update the reference)
+
+
+result IFA 
+Dataset             1 shot/                        5shot 
+FSS                 81.38                          83.33
+lung                74.59                          74.59
+DEEPGLOBE           50.55                          58.
+ISIC                -----                          -----
